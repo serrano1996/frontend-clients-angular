@@ -1,0 +1,45 @@
+<client-profile [client]="clientSelected" *ngIf="clientSelected"></client-profile>
+<div class="card border-primary mb-3">
+  <div class="card-header">Clientes</div>
+  <div class="card-body text-primary">
+    <h5 class="card-title">Listado de clientes</h5>
+    <div class="my-2 text-left">
+      <button class="btn btn-rounded btn-primary" type="button" [routerLink]="['/clients/form']">Añadir cliente</button>
+    </div>
+    <div *ngIf="clients?.length == 0" class="alert alert-info">
+      No hay clientes registrados aún
+    </div>
+    <table class="table table-bordered table-striped" *ngIf="clients?.length > 0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Email</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let client of clients">
+          <td>
+            <img (click)="fireModal(client)" *ngIf="client?.image" src="http://localhost:8080/api/uploads/img/{{client.image}}"
+            alt="{{client.image}}" class="img-thumbnail rounded img-fluid" style="width: 64px; cursor: pointer;">
+            <img (click)="fireModal(client)" *ngIf="!client?.image" src="http://localhost:8080/img/person.png"
+            alt="no photo" class="img-thumbnail rounded img-fluid" style="width: 64px; cursor: pointer;">
+          </td>
+          <td>{{ client.name }}</td>
+          <td>{{ client.lastname | uppercase }}</td>
+          <td>{{ client.email }}</td>
+          <td>{{ client.createdAt }}</td>
+          <td>
+            <button class="btn btn-rounded btn-warning" type="button" [routerLink]="['/clients/form', client.id]">Editar</button>
+          </td>
+          <td>
+            <button class="btn btn-rounded btn-danger" type="button" (click)="delete(client)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <paginator-nav *ngIf="paginator" [paginator]="paginator"></paginator-nav>
+  </div>
+</div>
